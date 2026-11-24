@@ -1,216 +1,39 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Aplikasi antrean rumah sakit sederhana">
-  <title>Sistem Antrean Rumah Sakit</title>
-  <style>
-    :root{--bg:#f4f7fb;--card:#fff;--tx:#1c2733;--mu:#667585;--pr:#0b6bcb;--ok:#1a8f4c;--wr:#d98200;--er:#c9372c;--bd:#dde5ee}
-    @media(prefers-color-scheme:dark){:root{--bg:#10161d;--card:#1a232d;--tx:#e8eef5;--mu:#93a1b0;--pr:#4da3ff;--ok:#4cc27f;--wr:#f0a53a;--er:#ff7066;--bd:#2c3947}}
-    *{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
-    header{background:var(--pr);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-    header h1{font-size:1.15rem;margin:0}nav{display:flex;gap:6px;flex-wrap:wrap}
-    nav button{background:rgba(255,255,255,.18);color:#fff;border:0;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:.9rem}
-    nav button.on{background:#fff;color:#0b6bcb;font-weight:600}main{max-width:960px;margin:0 auto;padding:18px}
-    .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:16px}
-    h2{margin:0 0 12px;font-size:1.05rem}label{display:block;font-size:.85rem;color:var(--mu);margin:10px 0 4px}
-    input,select{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font-size:1rem}
-    .btn{padding:10px 16px;border:0;border-radius:8px;background:var(--pr);color:#fff;font-size:.95rem;cursor:pointer;margin:10px 6px 0 0}
-    .btn.ok{background:var(--ok)}.btn.wr{background:var(--wr)}.btn.er{background:var(--er)}.btn.gh{background:transparent;color:var(--pr);border:1px solid var(--pr)}
-    .ticket{text-align:center;border:2px dashed var(--pr);border-radius:12px;padding:18px;margin-top:14px}.big{font-size:3rem;font-weight:800;color:var(--pr);line-height:1.1}
-    .mu{color:var(--mu);font-size:.9rem}.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.78rem;font-weight:600;color:#fff}
-    .menunggu{background:var(--wr)}.dipanggil{background:var(--pr)}.selesai{background:var(--ok)}.dilewati{background:var(--er)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.poli{text-align:center;padding:18px;border-radius:12px;background:var(--card);border:1px solid var(--bd)}
-    .poli .no{font-size:3.2rem;font-weight:800;color:var(--pr)}.poli.flash{animation:fl .8s 4;border-color:var(--ok)}
-    @keyframes fl{50%{background:var(--ok);color:#fff}}table{width:100%;border-collapse:collapse;font-size:.92rem}td,th{padding:8px;border-bottom:1px solid var(--bd);text-align:left}
-    .hide{display:none}.check-label{display:flex;gap:8px;align-items:center;margin:0}.check-label input{width:auto}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BPMN Sistem Antrean Rumah Sakit</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#ffffff; --text:#1f2933; --muted:#616e7c; --accent:#2563eb; --border:#d9dee5; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#14181d; --card:#1d232a; --text:#e6e9ed; --muted:#9aa5b1; --accent:#6ea0ff; --border:#2e3640; } }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); }
+  header { padding:24px 20px 8px; max-width:1400px; margin:0 auto; }
+  h1 { margin:0 0 6px; font-size:1.5rem; }
+  p.sub { margin:0; color:var(--muted); }
+  .actions { margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; }
+  .btn { display:inline-block; padding:8px 14px; border-radius:8px; border:1px solid var(--accent); color:var(--accent); text-decoration:none; font-size:.9rem; }
+  .btn:hover { background:var(--accent); color:#fff; }
+  main { max-width:1400px; margin:16px auto 40px; padding:0 20px; }
+  .viewer { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:auto; padding:8px; min-height:600px; }
+  footer { text-align:center; color:var(--muted); font-size:.85rem; padding:0 20px 30px; }
+</style>
 </head>
 <body>
-  <header>
-    <h1>🏥 Antrean Rumah Sakit</h1>
-    <nav aria-label="Navigasi utama">
-      <button type="button" data-v="pasien" class="on">Pasien</button>
-      <button type="button" data-v="petugas">Petugas</button>
-      <button type="button" data-v="display">Layar Antrean</button>
-    </nav>
-  </header>
-  <main>
-    <section id="pasien">
-      <div class="card">
-        <h2>Ambil nomor antrean</h2>
-        <label for="nama">Nama pasien</label><input id="nama" placeholder="Nama lengkap" autocomplete="name">
-        <label for="poli">Poli tujuan</label><select id="poli"></select>
-        <button type="button" class="btn" id="ambil">Ambil Antrean</button>
-        <div id="tiket" aria-live="polite"></div>
-      </div>
-      <div class="card">
-        <h2>Cek status antrean</h2>
-        <label for="cek">Nomor antrean</label><input id="cek" placeholder="Contoh: A001" autocomplete="off">
-        <button type="button" class="btn gh" id="cekBtn">Cek</button>
-        <div id="cekHasil" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <section id="petugas" class="hide">
-      <div class="card">
-        <h2>Panel petugas poli</h2>
-        <label for="pPoli">Poli</label><select id="pPoli"></select>
-        <div id="pInfo" style="margin-top:14px"></div>
-        <button type="button" class="btn" id="next">Panggil Berikutnya</button>
-        <button type="button" class="btn gh" id="ulang">Panggil Ulang</button>
-        <button type="button" class="btn ok" id="done">Selesai</button>
-        <button type="button" class="btn wr" id="skip">Lewati</button>
-        <button type="button" class="btn er" id="reset">Reset Semua Antrean</button>
-      </div>
-      <div class="card"><h2>Daftar antrean poli</h2><div id="pList"></div></div>
-    </section>
-
-    <section id="display" class="hide">
-      <div class="card"><label class="check-label"><input type="checkbox" id="suara"> Aktifkan suara panggilan</label></div>
-      <div class="grid" id="dGrid"></div>
-    </section>
-  </main>
-
-  <script>
-    'use strict';
-    const POLI=[["A","Poli Umum"],["B","Poli Gigi"],["C","Poli Anak"],["D","Penyakit Dalam"],["E","Poli Mata"]];
-    const KEY="antrean_rs_v1";
-    const ME="antrean_rs_me";
-    const $=selector=>document.querySelector(selector);
-    const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
-    const emptyState=()=>({tgl:today(),n:{},t:[],call:0,ck:""});
-    function load(){
-      try{
-        const data=JSON.parse(localStorage.getItem(KEY));
-        if(data&&data.tgl===today()&&Array.isArray(data.t)&&data.n&&typeof data.n==="object")return data;
-      }catch(error){console.warn("Data antrean tidak dapat dibaca:",error)}
-      return emptyState();
-    }
-    function save(data){
-      try{localStorage.setItem(KEY,JSON.stringify(data));return true}
-      catch(error){console.error("Data antrean tidak dapat disimpan:",error);alert("Penyimpanan browser penuh atau tidak tersedia. Coba aktifkan penyimpanan situs.");return false}
-    }
-    let S=load();
-    const pname=key=>(POLI.find(item=>item[0]===key)||[key,key])[1];
-    const fmt=(key,num)=>key+String(num).padStart(3,"0");
-    const esc=value=>String(value??"").replace(/[&<>\"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[char]));
-    const badge=status=>`<span class="badge ${esc(status)}">${esc(status)}</span>`;
-
-    POLI.forEach(([key,name])=>{
-      ["#poli","#pPoli"].forEach(selector=>$(selector).insertAdjacentHTML("beforeend",`<option value="${key}">${name}</option>`));
-    });
-
-    document.querySelectorAll("nav button").forEach(button=>button.addEventListener("click",()=>{
-      document.querySelectorAll("nav button").forEach(item=>item.classList.toggle("on",item===button));
-      ["pasien","petugas","display"].forEach(view=>$("#"+view).classList.toggle("hide",view!==button.dataset.v));
-      render();
-    }));
-
-    function ahead(ticket){return S.t.filter(item=>item.k===ticket.k&&item.s==="menunggu"&&item.at<ticket.at).length}
-    function ticketHtml(ticket,title){
-      const waiting=ahead(ticket);
-      return `<div class="ticket"><div class="mu">${title}</div><div class="big">${esc(ticket.no)}</div>
-        <div><b>${esc(ticket.nama)}</b> · ${esc(pname(ticket.k))}</div><div style="margin-top:6px">${badge(ticket.s)}</div>
-        ${ticket.s==="menunggu"?`<div class="mu" style="margin-top:8px">${waiting} antrean di depan Anda · perkiraan ±${(waiting+1)*5} menit</div>`:""}</div>`;
-    }
-    function render(){
-      S=load();
-      let myNumber="";
-      try{myNumber=localStorage.getItem(ME)||""}catch(error){console.warn("Nomor tiket tidak dapat dibaca:",error)}
-      const myTicket=S.t.find(item=>item.no===myNumber);
-      $("#tiket").innerHTML=myTicket?ticketHtml(myTicket,"Tiket Anda"):"";
-      $("#cekHasil").innerHTML=myNumber?(myTicket?ticketHtml(myTicket,"Status antrean"):`<p class="mu">Nomor ${esc(myNumber)} tidak ditemukan hari ini.</p>`):"";
-
-      const key=$("#pPoli").value||POLI[0][0];
-      const list=S.t.filter(item=>item.k===key);
-      const current=list.find(item=>item.s==="dipanggil");
-      const waiting=list.filter(item=>item.s==="menunggu");
-      $("#pInfo").innerHTML=`<div class="mu">Sedang dipanggil</div><div class="big">${current?esc(current.no):"-"}</div><div class="mu">${current?esc(current.nama):"Belum ada"} · ${waiting.length} menunggu</div>`;
-      $("#pList").innerHTML=list.length?`<div style="overflow-x:auto"><table><thead><tr><th>No</th><th>Nama</th><th>Status</th></tr></thead><tbody>${list.map(item=>`<tr><td>${esc(item.no)}</td><td>${esc(item.nama)}</td><td>${badge(item.s)}</td></tr>`).join("")}</tbody></table></div>`:`<p class="mu">Belum ada antrean.</p>`;
-
-      $("#dGrid").innerHTML=POLI.map(([code,name])=>{
-        const poliTickets=S.t.filter(item=>item.k===code);
-        const called=[...poliTickets].reverse().find(item=>item.s==="dipanggil");
-        const count=poliTickets.filter(item=>item.s==="menunggu").length;
-        return `<div class="poli" data-k="${code}"><div class="mu">${name}</div><div class="no">${called?esc(called.no):"-"}</div><div class="mu">${count} menunggu</div></div>`;
-      }).join("");
-    }
-
-    $("#ambil").addEventListener("click",()=>{
-      const name=$("#nama").value.trim();
-      if(!name){alert("Isi nama pasien terlebih dahulu.");$("#nama").focus();return}
-      S=load();
-      const key=$("#poli").value;
-      S.n[key]=(Number(S.n[key])||0)+1;
-      const ticket={no:fmt(key,S.n[key]),k:key,nama:name,s:"menunggu",at:Date.now()};
-      S.t.push(ticket);
-      if(!save(S))return;
-      try{localStorage.setItem(ME,ticket.no)}catch(error){console.warn("Nomor tiket tidak dapat disimpan:",error)}
-      $("#nama").value="";
-      render();
-    });
-
-    $("#cekBtn").addEventListener("click",()=>{
-      const number=$("#cek").value.trim().toUpperCase();
-      if(!number){alert("Masukkan nomor antrean.");$("#cek").focus();return}
-      try{localStorage.setItem(ME,number)}catch(error){console.warn("Nomor antrean tidak dapat disimpan:",error)}
-      render();
-    });
-
-    function act(action){
-      S=load();
-      const key=$("#pPoli").value||POLI[0][0];
-      action(S.t.filter(item=>item.k===key));
-      S.call=Date.now();S.ck=key;
-      save(S);render();
-    }
-    $("#next").addEventListener("click",()=>act(list=>{
-      list.forEach(item=>{if(item.s==="dipanggil")item.s="selesai"});
-      const nextTicket=list.find(item=>item.s==="menunggu");
-      if(nextTicket)nextTicket.s="dipanggil";else alert("Tidak ada antrean menunggu.");
-    }));
-    $("#done").addEventListener("click",()=>act(list=>{const current=list.find(item=>item.s==="dipanggil");if(current)current.s="selesai"}));
-    $("#skip").addEventListener("click",()=>act(list=>{const current=list.find(item=>item.s==="dipanggil");if(current)current.s="dilewati"}));
-    $("#ulang").addEventListener("click",()=>{
-      const key=$("#pPoli").value||POLI[0][0];
-      S=load();S.call=Date.now();S.ck=key;
-      save(S);render();
-      const current=[...S.t].reverse().find(item=>item.k===key&&item.s==="dipanggil");
-      if(current&&$("#suara").checked&&"speechSynthesis" in window){
-        const speech=new SpeechSynthesisUtterance(`Nomor antrean ${current.no.split("").join(" ")}, silakan menuju ${pname(key)}`);
-        speech.lang="id-ID";window.speechSynthesis.speak(speech);
-      }
-    });
-    $("#reset").addEventListener("click",()=>{
-      if(confirm("Hapus semua data antrean hari ini?")){
-        S=emptyState();save(S);
-        try{localStorage.removeItem(ME)}catch(error){console.warn("Nomor tiket tidak dapat dihapus:",error)}
-        render();
-      }
-    });
-    $("#pPoli").addEventListener("change",render);
-
-    let lastCall=S.call||0;
-    function onUpdate(){
-      const data=load();render();
-      if(data.call&&data.call!==lastCall){
-        lastCall=data.call;
-        const called=[...data.t].reverse().find(item=>item.k===data.ck&&item.s==="dipanggil");
-        if(called){
-          const element=document.querySelector(`.poli[data-k="${called.k}"]`);
-          if(element){element.classList.remove("flash");void element.offsetWidth;element.classList.add("flash")}
-          if($("#suara").checked&&"speechSynthesis" in window){
-            const speech=new SpeechSynthesisUtterance(`Nomor antrean ${called.no.split("").join(" ")}, silakan menuju ${pname(called.k)}`);
-            speech.lang="id-ID";window.speechSynthesis.speak(speech);
-          }
-        }
-      }
-    }
-    window.addEventListener("storage",event=>{if(event.key===KEY||event.key===ME)onUpdate()});
-    window.setInterval(onUpdate,3000);
-    render();
-  </script>
+<header>
+  <h1>BPMN Sistem Antrean Rumah Sakit</h1>
+  <p class="sub">Diagram proses bisnis. Gunakan tombol zoom di toolbar atau klik ikon layar penuh untuk melihat detail.</p>
+  <div class="actions">
+    <a class="btn" href="BPMN_Sella.drawio" download>Unduh file .drawio</a>
+  </div>
+</header>
+<main>
+  <div class="viewer">
+    <div class="mxgraph" style="max-width:100%" data-mxgraph='{"highlight":"#0000ff","nav":true,"resize":true,"fit":1,"toolbar":"zoom layers lightbox","edit":"_blank","xml":"&lt;mxfile host=&quot;app.diagrams.net&quot; pages=&quot;1&quot;&gt;&lt;diagram id=&quot;bpmn1&quot; name=&quot;BPMN Sistem Antrean RS&quot;&gt;&lt;mxGraphModel dx=&quot;1400&quot; dy=&quot;900&quot; grid=&quot;1&quot; gridSize=&quot;10&quot; guides=&quot;1&quot; tooltips=&quot;1&quot; connect=&quot;1&quot; arrows=&quot;1&quot; fold=&quot;1&quot; page=&quot;1&quot; pageScale=&quot;1&quot; pageWidth=&quot;2800&quot; pageHeight=&quot;900&quot; math=&quot;0&quot; shadow=&quot;0&quot;&gt;&lt;root&gt;&lt;mxCell id=&quot;0&quot;/&gt;&lt;mxCell id=&quot;1&quot; parent=&quot;0&quot;/&gt;&lt;mxCell id=&quot;title&quot; value=&quot;BPMN Sistem Antrean Rumah Sakit&quot; style=&quot;text;html=1;fontSize=18;fontStyle=1;align=left&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;40&quot; y=&quot;2&quot; width=&quot;600&quot; height=&quot;34&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;pool&quot; value=&quot;Sistem Antrean Rumah Sakit&quot; style=&quot;swimlane;html=1;horizontal=0;startSize=30;whiteSpace=wrap;fontStyle=1;fontSize=13;collapsible=0;fillColor=#ffffff;strokeColor=#000000&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;40&quot; y=&quot;40&quot; width=&quot;2640&quot; height=&quot;760&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;ln_pas&quot; value=&quot;Pasien&quot; style=&quot;swimlane;html=1;horizontal=0;startSize=30;whiteSpace=wrap;fontStyle=1;fontSize=12;collapsible=0;fillColor=#dae8fc;strokeColor=#000000&quot; vertex=&quot;1&quot; parent=&quot;pool&quot;&gt;&lt;mxGeometry x=&quot;30&quot; y=&quot;0&quot; width=&quot;2610&quot; height=&quot;130&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;s1&quot; value=&quot;Pasien datang&quot; style=&quot;shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;perimeter=ellipsePerimeter;aspect=fixed;outline=standard;symbol=general;fillColor=#d5e8d4;strokeColor=#82b366&quot; vertex=&quot;1&quot; parent=&quot;ln_pas&quot;&gt;&lt;mxGeometry x=&quot;82&quot; y=&quot;47&quot; width=&quot;36&quot; height=&quot;36&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;t1&quot; value=&quot;Mengisi data diri&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#ffffff;strokeColor=#6c8ebf&quot; vertex=&quot;1&quot; parent=&quot;ln_pas&quot;&gt;&lt;mxGeometry x=&quot;190&quot; y=&quot;33&quot; width=&quot;120&quot; height=&quot;64&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;ln_pet&quot; value=&quot;Petugas Pendaftaran&quot; style=&quot;swimlane;html=1;horizontal=0;startSize=30;whiteSpace=wrap;fontStyle=1;fontSize=12;collapsible=0;fillColor=#fff2cc;strokeColor=#000000&quot; vertex=&quot;1&quot; parent=&quot;pool&quot;&gt;&lt;mxGeometry x=&quot;30&quot; y=&quot;130&quot; width=&quot;2610&quot; height=&quot;130&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;t2&quot; value=&quot;Verifikasi data pasien&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#ffffff;strokeColor=#d6b656&quot; vertex=&quot;1&quot; parent=&quot;ln_pet&quot;&gt;&lt;mxGeometry x=&quot;340&quot; y=&quot;33&quot; width=&quot;120&quot; height=&quot;64&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;ln_sis&quot; value=&quot;Sistem Antrean RS&quot; style=&quot;swimlane;html=1;horizontal=0;startSize=30;whiteSpace=wrap;fontStyle=1;fontSize=12;collapsible=0;fillColor=#d5e8d4;strokeColor=#000000&quot; vertex=&quot;1&quot; parent=&quot;pool&quot;&gt;&lt;mxGeometry x=&quot;30&quot; y=&quot;260&quot; width=&quot;2610&quot; height=&quot;130&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;t4&quot; value=&quot;Simpan data &amp;amp; terbitkan rekam medis&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#ffffff;strokeColor=#82b366&quot; vertex=&quot;1&quot; parent=&quot;ln_sis&quot;&gt;&lt;mxGeometry x=&quot;640&quot; y=&quot;33&quot; width=&quot;150&quot; height=&quot;64&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;t7&quot; value=&quot;Buat nomor antrean&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#ffffff;strokeColor=#82b366&quot; vertex=&quot;1&quot; parent=&quot;ln_sis&quot;&gt;&lt;mxGeometry x=&quot;1240&quot; y=&quot;33&quot; width=&quot;120&quot; height=&quot;64&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;e1&quot; value=&quot;Pemeriksaan selesai&quot; style=&quot;shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;perimeter=ellipsePerimeter;aspect=fixed;outline=end;symbol=general;fillColor=#f8cecc;strokeColor=#b85450&quot; vertex=&quot;1&quot; parent=&quot;ln_sis&quot;&gt;&lt;mxGeometry x=&quot;2482&quot; y=&quot;47&quot; width=&quot;36&quot; height=&quot;36&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;f1&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;s1&quot; target=&quot;t1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;f2&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;t1&quot; target=&quot;t2&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;f3&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;t2&quot; target=&quot;t4&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;f4&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;t4&quot; target=&quot;t7&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;&lt;/diagram&gt;&lt;/mxfile&gt;"}'></div>
+  </div>
+</main>
+<footer>Dibuat dengan diagrams.net (draw.io)</footer>
+<script src="https://viewer.diagrams.net/js/viewer-static.min.js"></script>
 </body>
 </html>
