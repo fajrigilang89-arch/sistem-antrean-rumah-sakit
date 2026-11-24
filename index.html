@@ -1,155 +1,216 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sistem Antrean Rumah Sakit</title>
-<style>
-:root{--bg:#f4f7fb;--card:#fff;--tx:#1c2733;--mu:#667585;--pr:#0b6bcb;--ok:#1a8f4c;--wr:#d98200;--er:#c9372c;--bd:#dde5ee}
-@media(prefers-color-scheme:dark){:root{--bg:#10161d;--card:#1a232d;--tx:#e8eef5;--mu:#93a1b0;--pr:#4da3ff;--ok:#4cc27f;--wr:#f0a53a;--er:#ff7066;--bd:#2c3947}}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
-header{background:var(--pr);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-header h1{font-size:1.15rem;margin:0}
-nav{display:flex;gap:6px}nav button{background:rgba(255,255,255,.18);color:#fff;border:0;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:.9rem}
-nav button.on{background:#fff;color:#0b6bcb;font-weight:600}
-main{max-width:960px;margin:0 auto;padding:18px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:16px}
-h2{margin:0 0 12px;font-size:1.05rem}
-label{display:block;font-size:.85rem;color:var(--mu);margin:10px 0 4px}
-input,select{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font-size:1rem}
-.btn{padding:10px 16px;border:0;border-radius:8px;background:var(--pr);color:#fff;font-size:.95rem;cursor:pointer;margin:10px 6px 0 0}
-.btn.ok{background:var(--ok)}.btn.wr{background:var(--wr)}.btn.er{background:var(--er)}.btn.gh{background:transparent;color:var(--pr);border:1px solid var(--pr)}
-.ticket{text-align:center;border:2px dashed var(--pr);border-radius:12px;padding:18px;margin-top:14px}
-.big{font-size:3rem;font-weight:800;color:var(--pr);line-height:1.1}
-.mu{color:var(--mu);font-size:.9rem}
-.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.78rem;font-weight:600;color:#fff}
-.menunggu{background:var(--wr)}.dipanggil{background:var(--pr)}.selesai{background:var(--ok)}.dilewati{background:var(--er)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.poli{text-align:center;padding:18px;border-radius:12px;background:var(--card);border:1px solid var(--bd)}
-.poli .no{font-size:3.2rem;font-weight:800;color:var(--pr)}
-.poli.flash{animation:fl .8s 4;border-color:var(--ok)}@keyframes fl{50%{background:var(--ok);color:#fff}}
-table{width:100%;border-collapse:collapse;font-size:.92rem}td,th{padding:8px;border-bottom:1px solid var(--bd);text-align:left}
-.hide{display:none}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aplikasi antrean rumah sakit sederhana">
+  <title>Sistem Antrean Rumah Sakit</title>
+  <style>
+    :root{--bg:#f4f7fb;--card:#fff;--tx:#1c2733;--mu:#667585;--pr:#0b6bcb;--ok:#1a8f4c;--wr:#d98200;--er:#c9372c;--bd:#dde5ee}
+    @media(prefers-color-scheme:dark){:root{--bg:#10161d;--card:#1a232d;--tx:#e8eef5;--mu:#93a1b0;--pr:#4da3ff;--ok:#4cc27f;--wr:#f0a53a;--er:#ff7066;--bd:#2c3947}}
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+    header{background:var(--pr);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+    header h1{font-size:1.15rem;margin:0}nav{display:flex;gap:6px;flex-wrap:wrap}
+    nav button{background:rgba(255,255,255,.18);color:#fff;border:0;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:.9rem}
+    nav button.on{background:#fff;color:#0b6bcb;font-weight:600}main{max-width:960px;margin:0 auto;padding:18px}
+    .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:16px}
+    h2{margin:0 0 12px;font-size:1.05rem}label{display:block;font-size:.85rem;color:var(--mu);margin:10px 0 4px}
+    input,select{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font-size:1rem}
+    .btn{padding:10px 16px;border:0;border-radius:8px;background:var(--pr);color:#fff;font-size:.95rem;cursor:pointer;margin:10px 6px 0 0}
+    .btn.ok{background:var(--ok)}.btn.wr{background:var(--wr)}.btn.er{background:var(--er)}.btn.gh{background:transparent;color:var(--pr);border:1px solid var(--pr)}
+    .ticket{text-align:center;border:2px dashed var(--pr);border-radius:12px;padding:18px;margin-top:14px}.big{font-size:3rem;font-weight:800;color:var(--pr);line-height:1.1}
+    .mu{color:var(--mu);font-size:.9rem}.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.78rem;font-weight:600;color:#fff}
+    .menunggu{background:var(--wr)}.dipanggil{background:var(--pr)}.selesai{background:var(--ok)}.dilewati{background:var(--er)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.poli{text-align:center;padding:18px;border-radius:12px;background:var(--card);border:1px solid var(--bd)}
+    .poli .no{font-size:3.2rem;font-weight:800;color:var(--pr)}.poli.flash{animation:fl .8s 4;border-color:var(--ok)}
+    @keyframes fl{50%{background:var(--ok);color:#fff}}table{width:100%;border-collapse:collapse;font-size:.92rem}td,th{padding:8px;border-bottom:1px solid var(--bd);text-align:left}
+    .hide{display:none}.check-label{display:flex;gap:8px;align-items:center;margin:0}.check-label input{width:auto}
+  </style>
 </head>
 <body>
-<header>
-  <h1>🏥 Antrean Rumah Sakit</h1>
-  <nav>
-    <button data-v="pasien" class="on">Pasien</button>
-    <button data-v="petugas">Petugas</button>
-    <button data-v="display">Layar Antrean</button>
-  </nav>
-</header>
-<main>
-  <section id="pasien">
-    <div class="card">
-      <h2>Ambil nomor antrean</h2>
-      <label for="nama">Nama pasien</label><input id="nama" placeholder="Nama lengkap">
-      <label for="poli">Poli tujuan</label><select id="poli"></select>
-      <button class="btn" id="ambil">Ambil Antrean</button>
-      <div id="tiket"></div>
-    </div>
-    <div class="card">
-      <h2>Cek status antrean</h2>
-      <label for="cek">Nomor antrean</label><input id="cek" placeholder="Contoh: A001">
-      <button class="btn gh" id="cekBtn">Cek</button>
-      <div id="cekHasil"></div>
-    </div>
-  </section>
+  <header>
+    <h1>🏥 Antrean Rumah Sakit</h1>
+    <nav aria-label="Navigasi utama">
+      <button type="button" data-v="pasien" class="on">Pasien</button>
+      <button type="button" data-v="petugas">Petugas</button>
+      <button type="button" data-v="display">Layar Antrean</button>
+    </nav>
+  </header>
+  <main>
+    <section id="pasien">
+      <div class="card">
+        <h2>Ambil nomor antrean</h2>
+        <label for="nama">Nama pasien</label><input id="nama" placeholder="Nama lengkap" autocomplete="name">
+        <label for="poli">Poli tujuan</label><select id="poli"></select>
+        <button type="button" class="btn" id="ambil">Ambil Antrean</button>
+        <div id="tiket" aria-live="polite"></div>
+      </div>
+      <div class="card">
+        <h2>Cek status antrean</h2>
+        <label for="cek">Nomor antrean</label><input id="cek" placeholder="Contoh: A001" autocomplete="off">
+        <button type="button" class="btn gh" id="cekBtn">Cek</button>
+        <div id="cekHasil" aria-live="polite"></div>
+      </div>
+    </section>
 
-  <section id="petugas" class="hide">
-    <div class="card">
-      <h2>Panel petugas poli</h2>
-      <label for="pPoli">Poli</label><select id="pPoli"></select>
-      <div id="pInfo" style="margin-top:14px"></div>
-      <button class="btn" id="next">Panggil Berikutnya</button>
-      <button class="btn gh" id="ulang">Panggil Ulang</button>
-      <button class="btn ok" id="done">Selesai</button>
-      <button class="btn wr" id="skip">Lewati</button>
-      <button class="btn er" id="reset">Reset Semua Antrean</button>
-    </div>
-    <div class="card"><h2>Daftar antrean poli</h2><div id="pList"></div></div>
-  </section>
+    <section id="petugas" class="hide">
+      <div class="card">
+        <h2>Panel petugas poli</h2>
+        <label for="pPoli">Poli</label><select id="pPoli"></select>
+        <div id="pInfo" style="margin-top:14px"></div>
+        <button type="button" class="btn" id="next">Panggil Berikutnya</button>
+        <button type="button" class="btn gh" id="ulang">Panggil Ulang</button>
+        <button type="button" class="btn ok" id="done">Selesai</button>
+        <button type="button" class="btn wr" id="skip">Lewati</button>
+        <button type="button" class="btn er" id="reset">Reset Semua Antrean</button>
+      </div>
+      <div class="card"><h2>Daftar antrean poli</h2><div id="pList"></div></div>
+    </section>
 
-  <section id="display" class="hide">
-    <div class="card"><label style="display:flex;gap:8px;align-items:center;margin:0"><input type="checkbox" id="suara" style="width:auto"> Aktifkan suara panggilan</label></div>
-    <div class="grid" id="dGrid"></div>
-  </section>
-</main>
+    <section id="display" class="hide">
+      <div class="card"><label class="check-label"><input type="checkbox" id="suara"> Aktifkan suara panggilan</label></div>
+      <div class="grid" id="dGrid"></div>
+    </section>
+  </main>
 
-<script>
-const POLI=[["A","Poli Umum"],["B","Poli Gigi"],["C","Poli Anak"],["D","Penyakit Dalam"],["E","Poli Mata"]];
-const KEY="antrean_rs_v1",ME="antrean_rs_me";
-const $=s=>document.querySelector(s);
-const hari=()=>new Date().toISOString().slice(0,10);
-function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.tgl===hari())return d}catch(e){}return{tgl:hari(),n:{},t:[],call:0}}
-function save(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}
-let S=load();
-const pname=k=>(POLI.find(p=>p[0]===k)||[,k])[1];
-const fmt=(k,n)=>k+String(n).padStart(3,"0");
-const esc=s=>s.replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
-const badge=s=>`<span class="badge ${s}">${s}</span>`;
+  <script>
+    'use strict';
+    const POLI=[["A","Poli Umum"],["B","Poli Gigi"],["C","Poli Anak"],["D","Penyakit Dalam"],["E","Poli Mata"]];
+    const KEY="antrean_rs_v1";
+    const ME="antrean_rs_me";
+    const $=selector=>document.querySelector(selector);
+    const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
+    const emptyState=()=>({tgl:today(),n:{},t:[],call:0,ck:""});
+    function load(){
+      try{
+        const data=JSON.parse(localStorage.getItem(KEY));
+        if(data&&data.tgl===today()&&Array.isArray(data.t)&&data.n&&typeof data.n==="object")return data;
+      }catch(error){console.warn("Data antrean tidak dapat dibaca:",error)}
+      return emptyState();
+    }
+    function save(data){
+      try{localStorage.setItem(KEY,JSON.stringify(data));return true}
+      catch(error){console.error("Data antrean tidak dapat disimpan:",error);alert("Penyimpanan browser penuh atau tidak tersedia. Coba aktifkan penyimpanan situs.");return false}
+    }
+    let S=load();
+    const pname=key=>(POLI.find(item=>item[0]===key)||[key,key])[1];
+    const fmt=(key,num)=>key+String(num).padStart(3,"0");
+    const esc=value=>String(value??"").replace(/[&<>\"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[char]));
+    const badge=status=>`<span class="badge ${esc(status)}">${esc(status)}</span>`;
 
-POLI.forEach(([k,n])=>{["#poli","#pPoli"].forEach(id=>$(id).insertAdjacentHTML("beforeend",`<option value="${k}">${n}</option>`))});
+    POLI.forEach(([key,name])=>{
+      ["#poli","#pPoli"].forEach(selector=>$(selector).insertAdjacentHTML("beforeend",`<option value="${key}">${name}</option>`));
+    });
 
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
-  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
-  ["pasien","petugas","display"].forEach(v=>$("#"+v).classList.toggle("hide",v!==b.dataset.v));
-  render();
-});
+    document.querySelectorAll("nav button").forEach(button=>button.addEventListener("click",()=>{
+      document.querySelectorAll("nav button").forEach(item=>item.classList.toggle("on",item===button));
+      ["pasien","petugas","display"].forEach(view=>$("#"+view).classList.toggle("hide",view!==button.dataset.v));
+      render();
+    }));
 
-$("#ambil").onclick=()=>{
-  const nama=$("#nama").value.trim();if(!nama){alert("Isi nama pasien terlebih dahulu.");return}
-  S=load();const k=$("#poli").value;S.n[k]=(S.n[k]||0)+1;
-  const t={no:fmt(k,S.n[k]),k,nama,s:"menunggu",at:Date.now()};S.t.push(t);save(S);
-  try{localStorage.setItem(ME,t.no)}catch(e){}
-  $("#nama").value="";render();
-};
-$("#cekBtn").onclick=()=>{try{localStorage.setItem(ME,$("#cek").value.trim().toUpperCase())}catch(e){}render()};
+    function ahead(ticket){return S.t.filter(item=>item.k===ticket.k&&item.s==="menunggu"&&item.at<ticket.at).length}
+    function ticketHtml(ticket,title){
+      const waiting=ahead(ticket);
+      return `<div class="ticket"><div class="mu">${title}</div><div class="big">${esc(ticket.no)}</div>
+        <div><b>${esc(ticket.nama)}</b> · ${esc(pname(ticket.k))}</div><div style="margin-top:6px">${badge(ticket.s)}</div>
+        ${ticket.s==="menunggu"?`<div class="mu" style="margin-top:8px">${waiting} antrean di depan Anda · perkiraan ±${(waiting+1)*5} menit</div>`:""}</div>`;
+    }
+    function render(){
+      S=load();
+      let myNumber="";
+      try{myNumber=localStorage.getItem(ME)||""}catch(error){console.warn("Nomor tiket tidak dapat dibaca:",error)}
+      const myTicket=S.t.find(item=>item.no===myNumber);
+      $("#tiket").innerHTML=myTicket?ticketHtml(myTicket,"Tiket Anda"):"";
+      $("#cekHasil").innerHTML=myNumber?(myTicket?ticketHtml(myTicket,"Status antrean"):`<p class="mu">Nomor ${esc(myNumber)} tidak ditemukan hari ini.</p>`):"";
 
-function ahead(t){return S.t.filter(x=>x.k===t.k&&x.s===\"menunggu\"&&x.at<t.at).length}
-function tiketHtml(t,judul){
-  const a=ahead(t);
-  return `<div class="ticket"><div class="mu">${judul}</div><div class="big">${t.no}</div>
-  <div><b>${esc(t.nama)}</b> · ${pname(t.k)}</div><div style="margin-top:6px">${badge(t.s)}</div>
-  ${t.s===\"menunggu\"?`<div class="mu" style="margin-top:8px">${a} antrean di depan Anda · perkiraan ±${(a+1)*5} menit</div>`:""}</div>`;
-}
-function render(){
-  S=load();
-  let me="";try{me=localStorage.getItem(ME)||""}catch(e){}
-  const t=S.t.find(x=>x.no===me);
-  $("#tiket").innerHTML=t?tiketHtml(t,"Tiket Anda"):"";
-  $("#cekHasil").innerHTML=me?(t?tiketHtml(t,"Status antrean"):`<p class="mu">Nomor ${esc(me)} tidak ditemukan hari ini.</p>`):"";
+      const key=$("#pPoli").value||POLI[0][0];
+      const list=S.t.filter(item=>item.k===key);
+      const current=list.find(item=>item.s==="dipanggil");
+      const waiting=list.filter(item=>item.s==="menunggu");
+      $("#pInfo").innerHTML=`<div class="mu">Sedang dipanggil</div><div class="big">${current?esc(current.no):"-"}</div><div class="mu">${current?esc(current.nama):"Belum ada"} · ${waiting.length} menunggu</div>`;
+      $("#pList").innerHTML=list.length?`<div style="overflow-x:auto"><table><thead><tr><th>No</th><th>Nama</th><th>Status</th></tr></thead><tbody>${list.map(item=>`<tr><td>${esc(item.no)}</td><td>${esc(item.nama)}</td><td>${badge(item.s)}</td></tr>`).join("")}</tbody></table></div>`:`<p class="mu">Belum ada antrean.</p>`;
 
-  const k=$("#pPoli").value,list=S.t.filter(x=>x.k===k);
-  const cur=list.find(x=>x.s===\"dipanggil\"),w=list.filter(x=>x.s===\"menunggu\");
-  $("#pInfo").innerHTML=`<div class="mu">Sedang dipanggil</div><div class="big">${cur?cur.no:"-"}</div><div class="mu">${cur?esc(cur.nama):"Belum ada"} · ${w.length} menunggu</div>`;
-  $("#pList").innerHTML=list.length?`<table><tr><th>No</th><th>Nama</th><th>Status</th></tr>${list.map(x=>`<tr><td>${x.no}</td><td>${esc(x.nama)}</td><td>${badge(x.s)}</td></tr>`).join("")}</table>`:`<p class="mu">Belum ada antrean.</p>`;
+      $("#dGrid").innerHTML=POLI.map(([code,name])=>{
+        const poliTickets=S.t.filter(item=>item.k===code);
+        const called=[...poliTickets].reverse().find(item=>item.s==="dipanggil");
+        const count=poliTickets.filter(item=>item.s==="menunggu").length;
+        return `<div class="poli" data-k="${code}"><div class="mu">${name}</div><div class="no">${called?esc(called.no):"-"}</div><div class="mu">${count} menunggu</div></div>`;
+      }).join("");
+    }
 
-  $("#dGrid").innerHTML=POLI.map(([c,n])=>{
-    const l=S.t.filter(x=>x.k===c),cu=[...l].reverse().find(x=>x.s===\"dipanggil\"),wt=l.filter(x=>x.s===\"menunggu\").length;
-    return `<div class="poli" data-k="${c}"><div class="mu">${n}</div><div class="no">${cu?cu.no:"-"}</div><div class="mu">${wt} menunggu</div></div>`}).join("");
-}
-function act(fn){S=load();const k=$("#pPoli").value;fn(S.t.filter(x=>x.k===k));S.call=Date.now();S.ck=k;save(S);render()}
-$("#next").onclick=()=>act(l=>{l.forEach(x=>{if(x.s===\"dipanggil\")x.s=\"selesai\"});const n=l.find(x=>x.s===\"menunggu\");if(n)n.s=\"dipanggil\";else alert("Tidak ada antrean menunggu.")});
-$("#done").onclick=()=>act(l=>{const c=l.find(x=>x.s===\"dipanggil\");if(c)c.s=\"selesai\"});
-$("#skip").onclick=()=>act(l=>{const c=l.find(x=>x.s===\"dipanggil\");if(c)c.s=\"dilewati\"});
-$("#ulang").onclick=()=>act(()=>{});
-$("#reset").onclick=()=>{if(confirm("Hapus semua data antrean hari ini?")){S={tgl:hari(),n:{},t:[],call:0};save(S);render()}};
-$("#pPoli").onchange=render;
+    $("#ambil").addEventListener("click",()=>{
+      const name=$("#nama").value.trim();
+      if(!name){alert("Isi nama pasien terlebih dahulu.");$("#nama").focus();return}
+      S=load();
+      const key=$("#poli").value;
+      S.n[key]=(Number(S.n[key])||0)+1;
+      const ticket={no:fmt(key,S.n[key]),k:key,nama:name,s:"menunggu",at:Date.now()};
+      S.t.push(ticket);
+      if(!save(S))return;
+      try{localStorage.setItem(ME,ticket.no)}catch(error){console.warn("Nomor tiket tidak dapat disimpan:",error)}
+      $("#nama").value="";
+      render();
+    });
 
-let lastCall=S.call||0;
-function onUpdate(){
-  const d=load();render();
-  if(d.call&&d.call!==lastCall){lastCall=d.call;
-    const c=[...d.t].reverse().find(x=>x.k===d.ck&&x.s===\"dipanggil\");
-    if(c){const el=document.querySelector(`.poli[data-k="${c.k}"]`);if(el)el.classList.add("flash");
-      if($("#suara").checked&&"speechSynthesis" in window){const u=new SpeechSynthesisUtterance(`Nomor antrean ${c.no.split(\"\").join(" ")}, silakan menuju ${pname(c.k)}`);u.lang="id-ID";speechSynthesis.speak(u)}}}
-}
-window.addEventListener("storage",e=>{if(e.key===KEY||e.key===ME)onUpdate()});
-setInterval(onUpdate,3000);
-render();
-</script>
+    $("#cekBtn").addEventListener("click",()=>{
+      const number=$("#cek").value.trim().toUpperCase();
+      if(!number){alert("Masukkan nomor antrean.");$("#cek").focus();return}
+      try{localStorage.setItem(ME,number)}catch(error){console.warn("Nomor antrean tidak dapat disimpan:",error)}
+      render();
+    });
+
+    function act(action){
+      S=load();
+      const key=$("#pPoli").value||POLI[0][0];
+      action(S.t.filter(item=>item.k===key));
+      S.call=Date.now();S.ck=key;
+      save(S);render();
+    }
+    $("#next").addEventListener("click",()=>act(list=>{
+      list.forEach(item=>{if(item.s==="dipanggil")item.s="selesai"});
+      const nextTicket=list.find(item=>item.s==="menunggu");
+      if(nextTicket)nextTicket.s="dipanggil";else alert("Tidak ada antrean menunggu.");
+    }));
+    $("#done").addEventListener("click",()=>act(list=>{const current=list.find(item=>item.s==="dipanggil");if(current)current.s="selesai"}));
+    $("#skip").addEventListener("click",()=>act(list=>{const current=list.find(item=>item.s==="dipanggil");if(current)current.s="dilewati"}));
+    $("#ulang").addEventListener("click",()=>{
+      const key=$("#pPoli").value||POLI[0][0];
+      S=load();S.call=Date.now();S.ck=key;
+      save(S);render();
+      const current=[...S.t].reverse().find(item=>item.k===key&&item.s==="dipanggil");
+      if(current&&$("#suara").checked&&"speechSynthesis" in window){
+        const speech=new SpeechSynthesisUtterance(`Nomor antrean ${current.no.split("").join(" ")}, silakan menuju ${pname(key)}`);
+        speech.lang="id-ID";window.speechSynthesis.speak(speech);
+      }
+    });
+    $("#reset").addEventListener("click",()=>{
+      if(confirm("Hapus semua data antrean hari ini?")){
+        S=emptyState();save(S);
+        try{localStorage.removeItem(ME)}catch(error){console.warn("Nomor tiket tidak dapat dihapus:",error)}
+        render();
+      }
+    });
+    $("#pPoli").addEventListener("change",render);
+
+    let lastCall=S.call||0;
+    function onUpdate(){
+      const data=load();render();
+      if(data.call&&data.call!==lastCall){
+        lastCall=data.call;
+        const called=[...data.t].reverse().find(item=>item.k===data.ck&&item.s==="dipanggil");
+        if(called){
+          const element=document.querySelector(`.poli[data-k="${called.k}"]`);
+          if(element){element.classList.remove("flash");void element.offsetWidth;element.classList.add("flash")}
+          if($("#suara").checked&&"speechSynthesis" in window){
+            const speech=new SpeechSynthesisUtterance(`Nomor antrean ${called.no.split("").join(" ")}, silakan menuju ${pname(called.k)}`);
+            speech.lang="id-ID";window.speechSynthesis.speak(speech);
+          }
+        }
+      }
+    }
+    window.addEventListener("storage",event=>{if(event.key===KEY||event.key===ME)onUpdate()});
+    window.setInterval(onUpdate,3000);
+    render();
+  </script>
 </body>
 </html>
